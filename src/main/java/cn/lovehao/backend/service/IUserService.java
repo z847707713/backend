@@ -19,4 +19,8 @@ public interface IUserService extends IService<User> {
 
      IPage<User> diyPage(Page page);
 
+     void forbid(String id);
+
+     void add(User user);
+
 }

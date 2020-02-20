@@ -21,11 +21,14 @@ public class MyUserDetailsService implements UserDetailsService {
     @Autowired
     UserMapper userMapper;
 
+
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userMapper.selectOne(new QueryWrapper<User>().eq("username",username));
         List<GrantedAuthority> authorities = new ArrayList<>();
-        return new org.springframework.security.core.userdetails.User(user.getUsername(),user.getPassword(),authorities);
+        cn.lovehao.backend.entity.UserDetails userDetails = new cn.lovehao.backend.entity.UserDetails(user.getUsername(),user.getPassword(),authorities);
+        userDetails.setId(user.getId());
+        return userDetails;
     }
 
 }

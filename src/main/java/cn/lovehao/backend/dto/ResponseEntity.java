@@ -8,22 +8,29 @@ public class ResponseEntity<T> {
 
     private String msg;
 
-    public ResponseEntity(T data, String code, String msg) {
+    private Boolean status;
+
+    public ResponseEntity(T data, String code, String msg,Boolean status) {
         this.data = data;
         this.code = code;
         this.msg = msg;
+        this.status = status;
     }
 
     public static <T> ResponseEntity<T>  success(T data){
-        return new ResponseEntity(data,"1","success");
+        return new ResponseEntity<T>(data,"1","success",true);
+    }
+
+    public static <T> ResponseEntity<T>  success(){
+        return new ResponseEntity<T>(null,"1","success",true);
     }
 
     public static <T> ResponseEntity<T>  error(T data){
-        return new ResponseEntity(data,"1","error");
+        return new ResponseEntity<T>(data,"1","error",false);
     }
 
     public static <T> ResponseEntity<T>  error(){
-        return new ResponseEntity(null,"1","error");
+        return new ResponseEntity<T>(null,"1","error",false);
     }
 
     public T getData() {
@@ -48,5 +55,13 @@ public class ResponseEntity<T> {
 
     public void setMsg(String msg) {
         this.msg = msg;
+    }
+
+    public Boolean getStatus() {
+        return status;
+    }
+
+    public void setStatus(Boolean status) {
+        this.status = status;
     }
 }

@@ -40,7 +40,7 @@
                                     </div>
                                 </form>
                                 <div class="toolbar-btn-action">
-                                    <a class="btn btn-primary m-r-5" href="#!"><i class="mdi mdi-plus"></i> 新增</a>
+                                    <a class="btn btn-primary m-r-5" onclick="add()"><i class="mdi mdi-plus"></i> 新增</a>
                                     <a class="btn btn-success m-r-5" href="#!"><i class="mdi mdi-check"></i> 启用</a>
                                     <a class="btn btn-warning m-r-5" href="#!"><i class="mdi mdi-block-helper"></i>
                                         禁用</a>
@@ -145,13 +145,28 @@
                 pageSize: 'size'
             },
             callback: function (data, pagination) {   //回掉函数
+                //取消loading
+                lightyear.loading('hide');
                 //取消全选
                 $("#my-check-all").prop("checked",false);
                 //渲染表格
                 $('#data-container').html(template(data));
 
+                $('.checkbox-forbid').change(function(){
+                    //获取更改的id
+                    var id = $(this).attr('data-id');
+                    // 模拟禁用checkbox 功能
+                    $(this).prop("checked",!$(this).prop("checked"))
+                    // 具体禁用逻辑
+                    forbid($(this),id);
+                    return false;
+                })
+
+            },beforePaging:function(){
+                lightyear.loading('show');
             }
         });
+
 
 
         function template(data) {
@@ -170,12 +185,12 @@
 
                     if(data[i].isForbid){
                        html+= "<td><label class=\"lyear-switch switch-solid switch-primary\">" +
-                           "   <input type=\"checkbox\">" +
+                           "   <input class='checkbox-forbid' type=\"checkbox\" data-id='"+data[i].id+"'>" +
                            "  <span></span>" +
                            "</label></td>";
                     } else {
                         html+= "<td><label class=\"lyear-switch switch-solid switch-primary\">" +
-                            "   <input type=\"checkbox\" >" +
+                            "   <input class='checkbox-forbid' type=\"checkbox\" checked=\"true\" data-id='"+data[i].id+"'>" +
                             "  <span></span>" +
                             "</label></td>";
                     }
@@ -198,8 +213,128 @@
             return html;
         }
 
-
     });
+
+    function forbid(_this,id){
+        Confirm.alert('是否更改该用户状态',function () {
+            var data = {
+                id:id
+            };
+            Ajax.get("/admin/users/forbid",data,function(result){
+                lightyear.loading("hide");
+                if(result.status){
+                   _this.prop("checked",!_this.prop("checked"))
+                } else {
+                    Confirm.error("请求失败");
+                }
+            })
+        })
+        return false;
+    }
+
+    function add(){
+        $.confirm({
+            title: '新增用户',
+            useBootstrap: false,
+            boxWidth: '60%',
+            content: '<div class="col-md-12"><div class="card-body"><form id="confirm-form" class="form-horizontal" action="#" method="post" enctype="multipart/form-data" onsubmit="return false;">\n' +
+                '                  <div class="form-group">\n' +
+                '                    <label class="col-xs-12" for="example-email-input">用户名</label>\n' +
+                '                    <div class="col-xs-12">\n' +
+                '                      <input class="form-control" type="text" id="username-input" name="username" placeholder="用户名..">\n' +
+                '                    </div>\n' +
+                '                  </div>\n' +
+                '                  <div class="form-group">\n' +
+                '                    <label class="col-xs-12" for="password-input">密码</label>\n' +
+                '                    <div class="col-xs-12">\n' +
+                '                      <input class="form-control" type="password" id="password-input" name="password" placeholder="密码..">\n' +
+                '                    </div>\n' +
+                '                  </div>\n' +
+                '                  <div class="form-group">\n' +
+                '                    <label class="col-xs-12" for="nickname-input">昵称</label>\n' +
+                '                    <div class="col-xs-12">\n' +
+                '                      <input class="form-control" type="text" id="nickname-input" name="nickname" placeholder="昵称..">\n' +
+                '                    </div>\n' +
+                '                  </div>\n' +
+                '                  <div class="form-group">\n' +
+                '                    <label class="col-xs-12" for="phone-input">手机号</label>\n' +
+                '                    <div class="col-xs-12">\n' +
+                '                      <input class="form-control" type="text" id="phone-input" name="phone" placeholder="手机号..">\n' +
+                '                    </div>\n' +
+                '                  </div>\n' +
+                '                  <div class="form-group">\n' +
+                '                    <label class="col-xs-12" for="email-input">邮箱</label>\n' +
+                '                    <div class="col-xs-12">\n' +
+                '                      <input class="form-control" type="text" id="email-input" name="email" placeholder="邮箱..">\n' +
+                '                    </div>\n' +
+                '                  </div>\n' +
+                '                </form></div></div>',
+            buttons: {
+                confirm: {
+                    text: '确认',
+                    btnClass: 'btn-primary',
+                    action: function(){
+                        var formData = $('#confirm-form').serializeObject();
+                        if(verify(formData)){
+                            Ajax.post("/admin/user",formData,function(result){
+                                lightyear.loading("hide");
+                                if(result.status){
+                                    Notify.success("用户添加成功");
+                                }
+                            })
+                        } else {
+                            return false;
+                        }
+                    }
+                },
+                cancel: {
+                    text: '取消'
+                }
+            }
+        });
+        return false;
+    }
+
+    function verify(data){
+        //用户名为空
+        if(Verify.isEmpty(data.username)){
+            Notify.error('用户名不能为空')
+            return false;
+        }
+        //密码为空
+        if(Verify.isEmpty(data.password)){
+            Notify.error('密码不能为空')
+            return false;
+        }
+        //昵称为空
+        if(Verify.isEmpty(data.nickname)){
+            Notify.error('昵称不能为空')
+            return false;
+        }
+        //手机为空
+        if(Verify.isEmpty(data.phone)){
+            Notify.error('手机号不能为空')
+            return false;
+        }
+        //手机为空
+        if(!Verify.isPhone(data.phone)){
+            Notify.error('手机号不正确')
+            return false;
+        }
+        //邮箱为空
+        if(Verify.isEmpty(data.email)){
+            Notify.error('昵称不能为空')
+            return false;
+        }
+        //邮箱错误
+        if(!Verify.isEmail(data.email)){
+            Notify.error('邮箱不正确')
+            return false;
+        }
+        return true;
+    }
+
+
 </script>
 </body>
 </html>

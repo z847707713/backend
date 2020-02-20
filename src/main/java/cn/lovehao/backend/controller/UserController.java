@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -46,6 +47,30 @@ public class UserController {
         IPage<User> users = userService.diyPage(page);
         return ResponseEntity.success(users);
     }
+
+    /**
+     * 禁用
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping("/admin/users/forbid")
+    public ResponseEntity<String> forbid(String id){
+        userService.forbid(id);
+        return ResponseEntity.success();
+    }
+
+
+    /**
+     * 禁用
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "/admin/user",method = RequestMethod.POST)
+    public ResponseEntity<String> add(User user){
+        userService.add(user);
+        return ResponseEntity.success();
+    }
+
 
 
 }
