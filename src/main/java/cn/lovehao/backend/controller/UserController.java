@@ -17,7 +17,7 @@ import java.util.List;
 
 /**
  * <p>
- *  前端控制器
+ * 前端控制器
  * </p>
  *
  * @author zh
@@ -30,18 +30,19 @@ public class UserController {
     IUserService userService;
 
     @RequestMapping("/admin/users")
-    public String index(){
+    public String index() {
         return "/admin/users";
     }
 
     /**
-     *  分页:  size , current
+     * 分页:  size , current
+     *
      * @param page
      * @return
      */
-        @RequestMapping("/admin/users/list")
+    @RequestMapping("/admin/users/list")
     @ResponseBody
-    public ResponseEntity<IPage<User>> users(Page page){
+    public ResponseEntity<IPage<User>> users(Page page) {
         IPage<User> users = userService.diyPage(page);
         return ResponseEntity.success(users);
     }

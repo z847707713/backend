@@ -21,6 +21,11 @@ package cn.lovehao.backend.entity;
 
     private static final long serialVersionUID = 1L;
 
+    /**
+     * id
+     */
+    private String id;
+
             /**
             * 用户名
             */
