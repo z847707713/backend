@@ -55,7 +55,7 @@
                                         <tr>
                                             <th>
                                                 <label class="lyear-checkbox checkbox-primary">
-                                                    <input type="checkbox" id="check-all"><span></span>
+                                                    <input type="checkbox" id="my-check-all"><span></span>
                                                 </label>
                                             </th>
                                             <th>编号</th>
@@ -119,6 +119,11 @@
             $('#search-btn').html($(this).text() + ' <span class="caret"></span>');
         });
 
+
+        $("#my-check-all").change(function () {
+            $("input[class='check-all']").prop('checked', $(this).prop("checked"));
+        });
+
         $('#pagination-container').pagination({
             dataSource: '/admin/users/list', //请求的url
             locator: 'data.records', //返回值data的位置
@@ -140,9 +145,11 @@
                 pageSize: 'size'
             },
             callback: function (data, pagination) {   //回掉函数
-
-                console.log(data);
+                //取消全选
+                $("#my-check-all").prop("checked",false);
+                //渲染表格
                 $('#data-container').html(template(data));
+
             }
         });
 
@@ -153,14 +160,27 @@
                 html += "<tr>" +
                     "                                            <td>" +
                     "                                                <label class=\"lyear-checkbox checkbox-primary\">" +
-                    "                                                    <input type=\"checkbox\" name=\"ids[]\" value=\"" + data[i].id + "\"><span></span>" +
+                    "                                                    <input type=\"checkbox\" class='check-all' name=\"ids[]\" value=\"" + data[i].id + "\"><span></span>" +
                     "                                                </label>" +
                     "                                            </td>" +
                     "                                            <td>" + data[i].id + "</td>\n" +
                     "                                            <td>" + data[i].username + "</td>\n" +
                     "                                            <td>" + data[i].nickName + "</td>\n" +
-                    "                                            <td>" + data[i].email +  "</td>\n" +
-                    "                                            <td>" + data[i].isForbid +  "</td>" +
+                    "                                            <td>" + data[i].email +  "</td>\n";
+
+                    if(data[i].isForbid){
+                       html+= "<td><label class=\"lyear-switch switch-solid switch-primary\">" +
+                           "   <input type=\"checkbox\">" +
+                           "  <span></span>" +
+                           "</label></td>";
+                    } else {
+                        html+= "<td><label class=\"lyear-switch switch-solid switch-primary\">" +
+                            "   <input type=\"checkbox\" >" +
+                            "  <span></span>" +
+                            "</label></td>";
+                    }
+
+                    html +=
                     "                                            <td>"+ data[i].createTime +"</td>\n" +
                     "                                            <td>\n" +
                     "                                                <div class=\"btn-group\">\n" +
