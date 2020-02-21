@@ -23,4 +23,6 @@ public interface IUserService extends IService<User> {
 
      void add(User user);
 
+     void update(User user);
+
 }

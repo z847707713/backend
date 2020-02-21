@@ -33,6 +33,10 @@ public class ResponseEntity<T> {
         return new ResponseEntity<T>(null,"1","error",false);
     }
 
+    public static <T> ResponseEntity<T>  error(String msg){
+        return new ResponseEntity<T>(null,"1",msg,false);
+    }
+
     public T getData() {
         return data;
     }

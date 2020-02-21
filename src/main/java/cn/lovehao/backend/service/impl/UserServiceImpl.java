@@ -57,7 +57,19 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         }
         //保存用户
         user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setIsDelete(false);
+        user.setIsForbid(false);
         save(user);
+    }
+
+    @Override
+    public void update(User user) {
+        User oldUser = getById(user.getId());
+        int count = count(new QueryWrapper<User>().eq("username", user.getUsername()));
+        if (count > 0 && !oldUser.getUsername().equals(user.getUsername())) {
+            throw new RuntimeException("用户已经存在");
+        }
+        updateById(user);
     }
 
 }

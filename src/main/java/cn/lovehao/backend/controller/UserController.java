@@ -61,7 +61,7 @@ public class UserController {
 
 
     /**
-     * 禁用
+     * 添加用户
      * @return
      */
     @ResponseBody
@@ -71,6 +71,38 @@ public class UserController {
         return ResponseEntity.success();
     }
 
+    /**
+     * 修改用户
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "/admin/user",method = RequestMethod.PUT)
+    public ResponseEntity<String> update(User user){
+        userService.update(user);
+        return ResponseEntity.success();
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/admin/user",method = RequestMethod.GET)
+    public ResponseEntity<User> get(String id){
+        User user = userService.getById(id);
+        if(user == null){
+            return ResponseEntity.error("id 为" + id + "的用户不存在");
+        }
+        return ResponseEntity.success(user);
+    }
+
+    @ResponseBody
+    @RequestMapping(value = "/admin/user",method = RequestMethod.DELETE)
+    public ResponseEntity<String> delete(String id){
+        User user = userService.getById(id);
+        if(user == null){
+            return ResponseEntity.error("id 为" + id + "的用户不存在");
+        }
+        user.setIsDelete(true);
+        userService.updateById(user);
+        return ResponseEntity.success();
+    }
 
 
 }
