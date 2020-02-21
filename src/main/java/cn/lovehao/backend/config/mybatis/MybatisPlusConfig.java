@@ -20,14 +20,6 @@ public class MybatisPlusConfig {
     }
 
 
-    /**
-     * 自动为共有字段赋值 插件
-     *
-     * @return
-     */
-    @Bean
-    public AutoSetInterceptor autoSetInterceptor() {
-        return new AutoSetInterceptor();
-    }
+
 
 }

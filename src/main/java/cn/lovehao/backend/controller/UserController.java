@@ -8,11 +8,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -43,8 +39,8 @@ public class UserController {
      */
     @RequestMapping("/admin/users/list")
     @ResponseBody
-    public ResponseEntity<IPage<User>> users(Page page) {
-        IPage<User> users = userService.diyPage(page);
+    public ResponseEntity<IPage<User>> users(Page page,User user) {
+        IPage<User> users = userService.diyPage(page,user);
         return ResponseEntity.success(users);
     }
 
@@ -103,6 +99,34 @@ public class UserController {
         userService.updateById(user);
         return ResponseEntity.success();
     }
+
+    /**
+     * 批量禁止或开启
+     * @param ids
+     * @param type
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "/admin/user/batchForbid",method = RequestMethod.PUT)
+    public ResponseEntity<String> batchUpdateIsForbid(@RequestParam("ids[]") List<String> ids,@RequestParam("type")Boolean type){
+        userService.batchForbid(ids,type);
+        return ResponseEntity.success();
+    }
+
+
+    /**
+     * 批量禁止或开启
+     * @param ids
+     * @return
+     */
+    @ResponseBody
+    @RequestMapping(value = "/admin/users",method = RequestMethod.DELETE)
+    public ResponseEntity<String> batchDelete(@RequestParam("ids[]") List<String> ids){
+        userService.batchDelete(ids);
+        return ResponseEntity.success();
+    }
+
+
 
 
 }

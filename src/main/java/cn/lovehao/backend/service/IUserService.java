@@ -17,12 +17,16 @@ import java.util.List;
  */
 public interface IUserService extends IService<User> {
 
-     IPage<User> diyPage(Page page);
+     IPage<User> diyPage(Page page,User user);
 
      void forbid(String id);
 
      void add(User user);
 
      void update(User user);
+
+     void batchForbid(List<String> ids,Boolean type);
+
+     void batchDelete(List<String> ids);
 
 }

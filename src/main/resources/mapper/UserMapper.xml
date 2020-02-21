@@ -2,4 +2,44 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cn.lovehao.backend.mapper.UserMapper">
 
+
+
+    <sql id="Base_Column_List">
+               id, username,nick_name,initials, head_img,
+               signature,
+               phone,
+               email,
+               birth_date,
+               is_forbid,
+               is_delete,
+               create_by,
+               create_time,
+               update_by,
+               update_time
+    </sql>
+
+    <select id="selectPage" resultType="cn.lovehao.backend.entity.User">
+        SELECT
+        <include refid="Base_Column_List" />
+        FROM user
+        <where>
+            is_delete = 0
+            <if test="user.username != null and user.username != ''">
+                AND username like CONCAT('%',#{user.username},'%')
+            </if>
+            <if test="user.nickName != null and user.nickName != ''">
+                AND nick_name like CONCAT('%',#{user.nickName},'%')
+            </if>
+            <if test="user.phone != null and user.phone != ''">
+                AND phone like CONCAT('%',#{user.phone},'%')
+            </if>
+            <if test="user.email != null and user.email != ''">
+                AND email like CONCAT('%',#{user.email},'%')
+            </if>
+            <if test="user.isForbid != null">
+                AND is_forbid = #{user.isForbid}
+            </if>
+        </where>
+    </select>
+
 </mapper>

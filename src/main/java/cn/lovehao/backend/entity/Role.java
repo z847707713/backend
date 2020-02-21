@@ -2,6 +2,9 @@ package cn.lovehao.backend.entity;
 
     import java.util.Date;
     import java.io.Serializable;
+
+    import com.baomidou.mybatisplus.annotation.FieldFill;
+    import com.baomidou.mybatisplus.annotation.TableField;
     import lombok.Data;
     import lombok.EqualsAndHashCode;
     import lombok.experimental.Accessors;
@@ -36,12 +39,16 @@ package cn.lovehao.backend.entity;
             */
     private String roleDesc;
 
+    @TableField(fill = FieldFill.INSERT)
     private String createBy;
 
+    @TableField(fill = FieldFill.INSERT)
     private Date createTime;
 
+    @TableField(fill = FieldFill.INSERT_UPDATE)
     private String updateBy;
 
+    @TableField(fill = FieldFill.INSERT_UPDATE)
     private Date updateTime;
 
 

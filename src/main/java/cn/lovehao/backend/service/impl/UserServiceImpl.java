@@ -1,6 +1,7 @@
 package cn.lovehao.backend.service.impl;
 
 import cn.lovehao.backend.entity.User;
+import cn.lovehao.backend.exception.ServiceException;
 import cn.lovehao.backend.mapper.UserMapper;
 import cn.lovehao.backend.service.IUserService;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -12,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -29,21 +31,19 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     @Autowired
     PasswordEncoder passwordEncoder;
 
+    @Autowired
+    UserMapper userMapper;
+
     @Override
-    public IPage<User> diyPage(Page page) {
-        IPage iPage = page(page,
-                new QueryWrapper<User>()
-                        .select("id", "username", "nick_name", "initials", "head_img", "signature", "phone", "email"
-                                , "is_forbid", "is_delete", "create_by", "create_time", "update_by", "update_time")
-                        .eq("is_delete", false));
-        return iPage;
+    public IPage<User> diyPage(Page page,User user) {
+        return userMapper.selectPage(page,user);
     }
 
     @Override
     public void forbid(String id) {
         User user = getById(id);
         if (user == null) {
-            throw new RuntimeException("用户不存在");
+            throw new ServiceException("用户不存在");
         }
         user.setIsForbid(!user.getIsForbid());
         updateById(user);
@@ -53,7 +53,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     public void add(User user) {
         int count = count(new QueryWrapper<User>().eq("username", user.getUsername()));
         if (count > 0) {
-            throw new RuntimeException("用户已经存在");
+            throw new ServiceException("用户已经存在");
         }
         //保存用户
         user.setPassword(passwordEncoder.encode(user.getPassword()));
@@ -67,9 +67,33 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         User oldUser = getById(user.getId());
         int count = count(new QueryWrapper<User>().eq("username", user.getUsername()));
         if (count > 0 && !oldUser.getUsername().equals(user.getUsername())) {
-            throw new RuntimeException("用户已经存在");
+            throw new ServiceException("用户已经存在");
         }
         updateById(user);
+    }
+
+    @Override
+    public void batchForbid(List<String> ids, Boolean type) {
+        List<User> users = new ArrayList<>();
+        for(String id : ids){
+            User user = new User();
+            user.setId(id);
+            user.setIsForbid(type);
+            users.add(user);
+        }
+        updateBatchById(users);
+    }
+
+    @Override
+    public void batchDelete(List<String> ids) {
+        List<User> users = new ArrayList<>();
+        for(String id : ids){
+            User user = new User();
+            user.setId(id);
+            user.setIsDelete(true);
+            users.add(user);
+        }
+        updateBatchById(users);
     }
 
 }
