@@ -1,14 +1,19 @@
 package cn.lovehao.backend.service.impl;
 
+import cn.lovehao.backend.config.session.SessionManager;
+import cn.lovehao.backend.config.session.UserSessionManager;
 import cn.lovehao.backend.entity.User;
 import cn.lovehao.backend.exception.ServiceException;
 import cn.lovehao.backend.mapper.UserMapper;
 import cn.lovehao.backend.service.IUserService;
+import cn.lovehao.backend.utils.SpringSecurityUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.catalina.security.SecurityUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -26,6 +31,7 @@ import java.util.List;
  * @since 2020-02-18
  */
 @Service
+@Slf4j
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IUserService {
 
     @Autowired
@@ -33,6 +39,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
 
     @Autowired
     UserMapper userMapper;
+
+    @Autowired
+    UserSessionManager userSessionManager;
+
 
     @Override
     public IPage<User> diyPage(Page page,User user) {
@@ -45,8 +55,20 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         if (user == null) {
             throw new ServiceException("用户不存在");
         }
+
+        if(SpringSecurityUtil.getCurrentUserId().equals(id)){
+            throw new ServiceException("不能禁用自己");
+        }
+
         user.setIsForbid(!user.getIsForbid());
         updateById(user);
+
+        if(user.getIsForbid()){
+            //用户已经被禁用
+            log.info("id为{}的用户 {} 被强制下线",user.getId(),user.getUsername());
+            userSessionManager.destroy(id);
+        }
+
     }
 
     @Override
@@ -69,6 +91,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
         if (count > 0 && !oldUser.getUsername().equals(user.getUsername())) {
             throw new ServiceException("用户已经存在");
         }
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         updateById(user);
     }
 

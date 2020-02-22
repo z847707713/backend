@@ -394,6 +394,11 @@
 
     function template(data) {
         var html = "";
+
+        if(data.length <= 0){
+            html+='<tr><td colspan="8" style="text-align: center">没有数据</td></tr>'
+        }
+
         for (var i = 0; i < data.length; i++) {
             html += "<tr>" +
                 "                                            <td>" +
