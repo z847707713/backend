@@ -22,7 +22,7 @@
                                 <form id="search-form" class="pull-right search-bar" method="get" action="#!" role="form">
                                     <div class="input-group">
                                         <div class="input-group-btn">
-                                            <input type="hidden" name="search_field" id="search-field" value="title">
+                                            <input type="hidden" name="search_field" id="search-field" value="username">
                                             <button class="btn btn-default dropdown-toggle" id="search-btn"
                                                     data-toggle="dropdown" type="button" aria-haspopup="true"
                                                     aria-expanded="false">
@@ -113,12 +113,14 @@
 <script type="text/javascript">
     $(function () {
 
+        var url = "/admin/users/list";
+
         $('#search-form').on('submit',function(event){
-             // var field = $('#search-field').val()
-             // var value = $('#keywork-input').val()
-             // var url = "/admin/user";
-             // Ajax.get()
-             // return false;
+             var field = $('#search-field').val()
+             var value = $('#keywork-input').val()
+             var reloadUrl = url + "?" + field + "=" + value;
+             pageload(reloadUrl)
+             return false;
         })
 
         $('.search-bar .dropdown-menu a').click(function () {
@@ -131,7 +133,7 @@
         $("#my-check-all").change(function () {
             $("input[class='check-all']").prop('checked', $(this).prop("checked"));
         });
-        pageload(2);
+        pageload(url);
 
     });
 
@@ -239,9 +241,9 @@
         })
     }
 
-    function pageload(){
+    function pageload(url){
         $('#pagination-container').pagination({
-            dataSource: '/admin/users/list', //请求的url
+            dataSource: url, //请求的url
             locator: 'data.records', //返回值data的位置
             totalNumberLocator: function (res) { //返回值总数量的位置
                 return Math.floor(res.data.total);
