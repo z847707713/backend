@@ -2,4 +2,19 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cn.lovehao.backend.mapper.PermissionMapper">
 
+
+    <sql id="permissionDto">
+        id,url,name,parent
+    </sql>
+
+    <select id="selectAllUrls" resultType="cn.lovehao.backend.dto.PermissionDto">
+        SELECT <include refid="permissionDto" />
+        FROM permission
+        <where>
+            type = 0
+        </where>
+        ORDER BY order_no
+    </select>
+
+
 </mapper>

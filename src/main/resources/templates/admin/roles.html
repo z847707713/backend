@@ -13,38 +13,38 @@
         <!--页面主要内容-->
         <main class="lyear-layout-content">
 
+
             <div class="container-fluid">
 
                 <div class="row">
                     <div class="col-lg-12">
                         <div class="card">
                             <div class="card-toolbar clearfix">
-                                <form id="search-form" class="pull-right search-bar" method="get" action="#!" role="form">
+                                <form id="search-form" class="pull-right search-bar" method="get" action="#!"
+                                      role="form">
                                     <div class="input-group">
                                         <div class="input-group-btn">
-                                            <input type="hidden" name="search_field" id="search-field" value="username">
+                                            <input type="hidden" name="search_field" id="search-field" value="role">
                                             <button class="btn btn-default dropdown-toggle" id="search-btn"
                                                     data-toggle="dropdown" type="button" aria-haspopup="true"
                                                     aria-expanded="false">
-                                                用户名 <span class="caret"></span>
+                                                角色CODE <span class="caret"></span>
                                             </button>
                                             <ul class="dropdown-menu">
-                                                <li><a tabindex="-1" href="javascript:void(0)" data-field="username">用户名</a>
+                                                <li><a tabindex="-1" href="javascript:void(0)"
+                                                       data-field="role">角色CODE</a>
                                                 </li>
                                                 <li><a tabindex="-1" href="javascript:void(0)"
-                                                       data-field="nickName">昵称</a></li>
+                                                       data-field="roleName">角色名</a></li>
                                             </ul>
                                         </div>
-                                        <input type="text" id="keywork-input" class="form-control" value="" name="keyword"
+                                        <input type="text" id="keywork-input" class="form-control" value=""
+                                               name="keyword"
                                                placeholder="请输入名称">
                                     </div>
                                 </form>
                                 <div class="toolbar-btn-action">
                                     <a class="btn btn-primary m-r-5" onclick="add()"><i class="mdi mdi-plus"></i> 新增</a>
-                                    <a class="btn btn-success m-r-5" onclick="batchOpenOrForbid(false)" href="#!"><i class="mdi mdi-check"></i> 启用</a>
-                                    <a class="btn btn-warning m-r-5" href="#!" onclick="batchOpenOrForbid(true)"><i class="mdi mdi-block-helper"></i>
-                                        禁用</a>
-                                    <a class="btn btn-danger" href="#!" onclick="batchDelete()"><i class="mdi mdi-window-close"></i> 删除</a>
                                 </div>
                             </div>
                             <div class="card-body">
@@ -58,39 +58,19 @@
                                                     <input type="checkbox" id="my-check-all"><span></span>
                                                 </label>
                                             </th>
-                                            <th>编号</th>
-                                            <th>用户名</th>
-                                            <th>昵称</th>
-                                            <th>电子邮箱</th>
-                                            <th>是否可用</th>
+                                            <th>ID</th>
+                                            <th>角色CODE</th>
+                                            <th>角色名</th>
+                                            <th>角色描述</th>
+                                            <th>创建者</th>
                                             <th>创建时间</th>
+                                            <th>更新者</th>
+                                            <th>更新时间</th>
                                             <th>操作</th>
                                         </tr>
                                         </thead>
                                         <tbody id="data-container">
-                                        <!--<tr>-->
-                                        <!--<td>-->
-                                        <!--<label class="lyear-checkbox checkbox-primary">-->
-                                        <!--<input type="checkbox" name="ids[]" value="1"><span></span>-->
-                                        <!--</label>-->
-                                        <!--</td>-->
-                                        <!--<td>1</td>-->
-                                        <!--<td>第01章 天涯思君不可忘</td>-->
-                                        <!--<td>《倚天屠龙记》</td>-->
-                                        <!--<td>金庸</td>-->
-                                        <!--<td>36</td>-->
-                                        <!--<td><font class="text-success">正常</font></td>-->
-                                        <!--<td>-->
-                                        <!--<div class="btn-group">-->
-                                        <!--<a class="btn btn-xs btn-default" href="#!" title=""-->
-                                        <!--data-toggle="tooltip" data-original-title="编辑"><i-->
-                                        <!--class="mdi mdi-pencil"></i></a>-->
-                                        <!--<a class="btn btn-xs btn-default" href="#!" title=""-->
-                                        <!--data-toggle="tooltip" data-original-title="删除"><i-->
-                                        <!--class="mdi mdi-window-close"></i></a>-->
-                                        <!--</div>-->
-                                        <!--</td>-->
-                                        <!--</tr>-->
+
                                         </tbody>
                                     </table>
                                 </div>
@@ -110,6 +90,8 @@
     </div>
 </div>
 <script src="/js/pagination.js"></script>
-<script th:src="@{/js/page/users.js}"></script>
+<script type="text/javascript">
+</script>
+<script th:src="@{/js/page/roles.js}"></script>
 </body>
 </html>

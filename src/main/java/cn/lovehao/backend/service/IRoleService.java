@@ -1,6 +1,8 @@
 package cn.lovehao.backend.service;
 
 import cn.lovehao.backend.entity.Role;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
 
 /**
@@ -13,4 +15,8 @@ import com.baomidou.mybatisplus.extension.service.IService;
  */
 public interface IRoleService extends IService<Role> {
 
+    IPage<Role> diyPage(Page<Role> page,Role role);
+
+
+    void delete(String id);
 }

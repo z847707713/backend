@@ -1,7 +1,10 @@
 package cn.lovehao.backend.mapper;
 
+import cn.lovehao.backend.dto.PermissionDto;
 import cn.lovehao.backend.entity.Permission;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+
+import java.util.List;
 
 /**
  * <p>
@@ -12,5 +15,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  * @since 2020-02-18
  */
 public interface PermissionMapper extends BaseMapper<Permission> {
+
+    List<Permission> selectAllUrls();
 
 }

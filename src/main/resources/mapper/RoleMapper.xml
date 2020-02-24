@@ -2,4 +2,29 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="cn.lovehao.backend.mapper.RoleMapper">
 
+
+    <sql id="common_sql">
+         id,role,role_name,role_desc,create_by,create_time,update_by,update_time
+    </sql>
+
+    <select id="selectAll" resultType="cn.lovehao.backend.entity.Role">
+
+        SELECT
+        <include refid="common_sql" />
+        FROM role
+        <where>
+            <if test="role.id != null and role.id != ''">
+                id LIKE CONCAT('%',#{role.id},'%')
+            </if>
+            <if test="role.role != null and role.role != ''">
+                role LIKE CONCAT('%',#{role.role},'%')
+            </if>
+            <if test="role.roleName != null and role.roleName != ''">
+                role_name LIKE CONCAT('%',#{role.roleName},'%')
+            </if>
+            <if test="role.roleDesc != null and role.roleDesc != ''">
+                role_desc LIKE CONCAT('%',#{role.roleDesc},'%')
+            </if>
+        </where>
+    </select>
 </mapper>

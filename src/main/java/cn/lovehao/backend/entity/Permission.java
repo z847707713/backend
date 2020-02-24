@@ -24,6 +24,8 @@ package cn.lovehao.backend.entity;
 
     private static final long serialVersionUID = 1L;
 
+    private String id;
+
             /**
             * 权限code
             */
@@ -66,5 +68,6 @@ package cn.lovehao.backend.entity;
     @TableField(fill = FieldFill.INSERT_UPDATE)
     private Date updateTime;
 
+    private Integer orderNo;
 
 }
