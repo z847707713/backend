@@ -5,13 +5,26 @@
         <div class="topbar">
 
             <div class="topbar-left">
-                <div class="lyear-aside-toggler">
-                    <span class="lyear-toggler-bar"></span>
-                    <span class="lyear-toggler-bar"></span>
-                    <span class="lyear-toggler-bar"></span>
-                </div>
-                <span class="navbar-page-title"> 后台首页 </span>
+            <div class="lyear-aside-toggler">
+                <span class="lyear-toggler-bar"></span>
+                <span class="lyear-toggler-bar"></span>
+                <span class="lyear-toggler-bar"></span>
             </div>
+
+            <th:block th:each="url : ${@commonCache.getUrls()}">
+                <th:block th:if="${url.isHasChild() && #httpServletRequest.getServletPath().contains(url.url)}">
+                    <th:block  th:each="child : ${url.childs}">
+                        <th:block th:if="${#httpServletRequest.getServletPath() eq child.url}">
+                            <span class="navbar-page-title" th:text="${url.name + ' - ' + child.name}"></span>
+                        </th:block>
+                    </th:block>
+                </th:block>
+                <th:block th:if="${!url.isHasChild() && #httpServletRequest.getServletPath() eq url.url}">
+                    <span class="navbar-page-title" th:text="${url.name}"></span>
+                </th:block>
+            </th:block>
+
+        </div>
 
             <ul class="topbar-right">
                 <li class="dropdown dropdown-profile">

@@ -10,11 +10,6 @@
         <nav class="sidebar-main">
             <ul class="nav nav-drawer" th:each="url : ${@commonCache.getUrls()}">
 
-                <template th:each="url : ${urls}">
-                      <label th:text="${url.name}"></label>
-                       <label th:text="${url.url}"></label>
-                </template>
-
                 <li th:if="${url.hasChild == false && #httpServletRequest.getServletPath() eq url.url}" class="nav-item active" >
                      <a th:href="${url.url}"><i class="mdi mdi-home"></i> [[${url.name}]]</a>
                 </li>
@@ -23,10 +18,14 @@
                 </li>
 
 
-                <li th:if="${url.hasChild}" th:class="${#httpServletRequest.getServletPath().contains('/admin') ? 'nav-item nav-item-has-subnav active open' : 'nav-item nav-item-has-subnav'}">
+                <li th:if="${url.hasChild}" th:class="${#httpServletRequest.getServletPath().contains(url.url) ? 'nav-item nav-item-has-subnav active open' : 'nav-item nav-item-has-subnav'}">
                     <a href="javascript:void(0)"><i class="mdi mdi-palette"></i>[[${url.name}]]</a>
+                    <th:block th:if="${#httpServletRequest.getServletPath().contains(url.url)}">
+                    </th:block>
                     <ul class="nav nav-subnav" th:each="child : ${url.childs}">
-                        <li class="active" th:if="${#httpServletRequest.getServletPath() eq child.url}"> <a th:href="${child.url}">[[${child.name}]]</a> </li>
+                        <th:block th:if="${#httpServletRequest.getServletPath() eq child.url}">
+                            <li class="active" th:if="${#httpServletRequest.getServletPath() eq child.url}"> <a th:href="${child.url}">[[${child.name}]]</a> </li>
+                        </th:block>
                         <li th:if="${#httpServletRequest.getServletPath() ne child.url}"> <a th:href="${child.url}">[[${child.name}]]</a> </li>
                     </ul>
                 </li>
