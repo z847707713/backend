@@ -12,8 +12,6 @@
         <!--End 头部信息-->
         <!--页面主要内容-->
         <main class="lyear-layout-content">
-
-
             <div class="container-fluid">
 
                 <div class="row">
@@ -24,18 +22,22 @@
                                       role="form">
                                     <div class="input-group">
                                         <div class="input-group-btn">
-                                            <input type="hidden" name="search_field" id="search-field" value="role">
+                                            <input type="hidden" name="search_field" id="search-field" value="permission">
                                             <button class="btn btn-default dropdown-toggle" id="search-btn"
                                                     data-toggle="dropdown" type="button" aria-haspopup="true"
                                                     aria-expanded="false">
-                                                角色CODE <span class="caret"></span>
+                                                权限CODE <span class="caret"></span>
                                             </button>
                                             <ul class="dropdown-menu">
                                                 <li><a tabindex="-1" href="javascript:void(0)"
-                                                       data-field="role">角色CODE</a>
+                                                       data-field="permission">权限CODE</a>
                                                 </li>
                                                 <li><a tabindex="-1" href="javascript:void(0)"
-                                                       data-field="roleName">角色名</a></li>
+                                                       data-field="name">权限名称</a></li>
+                                                <li><a tabindex="-1" href="javascript:void(0)"
+                                                       data-field="url">url</a></li>
+                                                <li><a tabindex="-1" href="javascript:void(0)"
+                                                       data-field="type">权限类型</a></li>
                                             </ul>
                                         </div>
                                         <input type="text" id="keywork-input" class="form-control" value=""
@@ -54,9 +56,12 @@
                                         <thead>
                                         <tr>
                                             <th>ID</th>
-                                            <th>角色CODE</th>
-                                            <th>角色名</th>
-                                            <th>角色描述</th>
+                                            <th>权限CODE</th>
+                                            <th>权限名</th>
+                                            <th>权限描述</th>
+                                            <th>url</th>
+                                            <th>权限类型</th>
+                                            <th>父节点</th>
                                             <th>创建者</th>
                                             <th>创建时间</th>
                                             <th>更新者</th>
@@ -79,14 +84,12 @@
                 </div>
 
             </div>
-
         </main>
         <!--End 页面主要内容-->
     </div>
 </div>
 <script src="/js/pagination.js"></script>
-<script type="text/javascript">
+<script th:src="@{/js/page/permission.js}">
 </script>
-<script th:src="@{/js/page/roles.js}"></script>
 </body>
 </html>

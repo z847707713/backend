@@ -2,12 +2,19 @@ package cn.lovehao.backend.service.impl;
 
 import cn.lovehao.backend.dto.PermissionDto;
 import cn.lovehao.backend.entity.Permission;
+import cn.lovehao.backend.entity.RolePermission;
+import cn.lovehao.backend.exception.ServiceException;
 import cn.lovehao.backend.mapper.PermissionMapper;
+import cn.lovehao.backend.mapper.RolePermissionMapper;
 import cn.lovehao.backend.service.IPermissionService;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,6 +33,9 @@ public class PermissionServiceImpl extends ServiceImpl<PermissionMapper, Permiss
     @Autowired
     PermissionMapper permissionMapper;
 
+    @Autowired
+    RolePermissionMapper rolePermissionMapper;
+
     /**
      *  获取所有的url ，并处理成 PermissionDto 的数据结构
      * @return
@@ -40,6 +50,28 @@ public class PermissionServiceImpl extends ServiceImpl<PermissionMapper, Permiss
             }
         }
         return permissionDtos;
+    }
+
+    @Override
+    public IPage<Permission> diyPage(Page<Permission> page, Permission permission) {
+        return permissionMapper.selectPage(page,permission);
+    }
+
+    @Transactional
+    @Override
+    public void delete(String id) {
+        //验证id 是否正确
+        Permission p = getById(id);
+        if(p == null){
+            throw new ServiceException("要删除得权限不存在");
+        }
+        // 验证该权限是否在 使用中
+        int count = rolePermissionMapper.selectCount(Wrappers.<RolePermission>lambdaQuery().eq(RolePermission::getPermissionId,id));
+        if(count > 0){
+            throw new ServiceException("该权限正在使用中，不可删除");
+        }
+        //开始删除
+        removeById(id);
     }
 
     /**

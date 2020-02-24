@@ -159,7 +159,7 @@ function pageload(url){
                 return false;
             })
 
-        },beforePaging:function(){
+        },beforeRender:function(){
             lightyear.loading('show');
         }
     });

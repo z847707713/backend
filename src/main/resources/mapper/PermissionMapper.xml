@@ -7,11 +7,40 @@
         id,url,name,parent
     </sql>
 
+    <sql id="all">
+        id,permission,name,p_desc,url,type,parent,create_by,create_time,update_by,update_time,order_no
+    </sql>
+
     <select id="selectAllUrls" resultType="cn.lovehao.backend.dto.PermissionDto">
         SELECT <include refid="permissionDto" />
         FROM permission
         <where>
             type = 0
+        </where>
+        ORDER BY order_no
+    </select>
+
+
+    <select id="selectPage" resultType="cn.lovehao.backend.entity.Permission">
+       SELECT <include refid="all" />
+        FROM permission
+        <where>
+            type = 0
+            <if test="p.permission != null and p.permission != ''">
+                and permission LIKE CONCAT('%',#{p.permission},'%')
+            </if>
+            <if test="p.name != null and p.name != ''">
+                and name LIKE CONCAT('%',#{p.name},'%')
+            </if>
+            <if test="p.url != null and p.url != ''">
+                and url LIKE CONCAT('%',#{p.url},'%')
+            </if>
+            <if test="p.type != null">
+                and type = #{p.type}
+            </if>
+            <if test="p.parent != null and p.parent != ''">
+                and parent = #{p.parent}
+            </if>
         </where>
         ORDER BY order_no
     </select>

@@ -1,6 +1,6 @@
 $(function () {
 
-    var url = "/admin/roles/list";
+    var url = "/admin/permissions/list";
     pageload(url);
 
     $('#search-form').on('submit', function (event) {
@@ -60,22 +60,31 @@ function pageload(url) {
 }
 
 
-var baseUrl = "/admin/role";
+var baseUrl = "/admin/permission";
 
 function template(data) {
     var html = '';
 
     if (data.length <= 0) {
-        html += '<tr><td colspan="9" style="text-align: center">没有数据</td></tr>'
+        html += '<tr><td colspan="13" style="text-align: center">没有数据</td></tr>'
         return html;
     }
 
     for (var i = 0; i < data.length; i++) {
         html += "<tr>" +
             "                                            <td>" + data[i].id + "</td>\n" +
-            "                                            <td>" + data[i].role + "</td>\n" +
-            "                                            <td>" + data[i].roleName + "</td>\n" +
-            "                                            <td>" + data[i].roleDesc + "</td>\n" +
+            "                                            <td>" + data[i].permission + "</td>\n" +
+            "                                            <td>" + data[i].name + "</td>\n" +
+            "                                            <td>" + Table.textFormate(data[i].pDesc) + "</td>\n" +
+            "                                            <td>" + data[i].url + "</td>\n";
+
+        if (data[i].type) {
+            html += '<td><i class="mdi mdi-adjust"></i></td>'
+        } else {
+            html += '<td><icon class="mdi mdi-library-books "></icon></td>'
+        }
+        html +=
+            "                                            <td>" + Table.textFormate(data[i].parent) + "</td>\n" +
             "                                            <td>" + data[i].createBy + "</td>\n" +
             "                                            <td>" + data[i].createTime + "</td>\n" +
             "                                            <td>" + data[i].updateBy + "</td>\n" +
